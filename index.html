@@ -134,6 +134,11 @@ html,body{ width:100%; height:100%; overflow:hidden; overscroll-behavior:none;
   animation:floatUp linear forwards; opacity:.92; }
 .balloon::after{ content:""; position:absolute; left:50%; top:100%; width:2px; height:34px; background:#0004; }
 @keyframes floatUp{ to{ transform:translateY(-115vh) rotate(6deg); } }
+body:fullscreen { overflow:auto; }
+body:fullscreen header, body:fullscreen .min-banner { display:none; }
+body:fullscreen .container { padding:6px; max-width:none; }
+body:fullscreen .canvas-container { max-width:min(99vw, calc((100dvh - 215px) * 1.5)); }
+body:fullscreen .toolbar { padding:7px; margin-bottom:7px; }
 </style>
 </head>
 <body>
@@ -188,10 +193,10 @@ html,body{ width:100%; height:100%; overflow:hidden; overscroll-behavior:none;
   <!-- Lienzo por capas: fondo / rellenos / líneas / dibujo -->
   <div class="canvas-container">
     <div class="canvas-stack" id="canvasStack">
-      <canvas id="layerBase" width="900" height="600"></canvas>
-      <canvas id="layerFill" width="900" height="600"></canvas>
-      <canvas id="layerLine" width="900" height="600"></canvas>
-      <canvas id="layerDraw" width="900" height="600"></canvas>
+      <canvas id="layerBase" width="1200" height="800"></canvas>
+      <canvas id="layerFill" width="1200" height="800"></canvas>
+      <canvas id="layerLine" width="1200" height="800"></canvas>
+      <canvas id="layerDraw" width="1200" height="800"></canvas>
     </div>
   </div>
 
@@ -254,7 +259,7 @@ html,body{ width:100%; height:100%; overflow:hidden; overscroll-behavior:none;
    plantilla · dibujo libre encima. El borrador solo borra el
    dibujo libre: las líneas y el color nunca se estropean.
    ============================================================ */
-const W = 900, H = 600;
+const W = 1200, H = 800;
 const cvBase = document.getElementById('layerBase'),  bx = cvBase.getContext('2d');
 const cvFill = document.getElementById('layerFill'),  fx = cvFill.getContext('2d');
 const cvLine = document.getElementById('layerLine'),  lx = cvLine.getContext('2d');
@@ -919,6 +924,10 @@ function init(){
     }
   }catch(e){ undoStack = []; saveState(); }
   refreshUndoBtns();
+}
+function toggleFull(){
+  if(document.fullscreenElement){ document.exitFullscreen().catch(function(){}); }
+  else { document.body.requestFullscreen().catch(function(){}); speak('Pantalla completa'); }
 }
 init();
 </script>
